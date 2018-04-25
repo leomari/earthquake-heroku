@@ -1,0 +1,185 @@
+<html>
+<head>
+    
+{% load static %}
+<meta charset='utf-8' />
+<title>SkyAlert</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-black.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet" href="{% static 'public/style_public2.css' %}">
+</head>
+
+<body>
+    
+<div id='map'></div>
+    
+<script src="{% static 'public/script_public5.js' %}"></script>  
+
+<div class='container' ></div>  
+    
+{% if user.is_authenticated %}
+<a id='home_button' href="{% url 'admin_home' %}">Home</a>
+{% else %}
+<a id='home_button' href="{% url 'login' %}">Admin</a>
+{% endif %}
+    
+
+    
+
+{% if earthquakes %}
+
+<div style='overflow-y:auto;'>
+<table class="w3-table w3-striped" style = "width:200px">
+<tr id='header_row'>
+    <td>Magnitude</td>
+    <td>Date</td>
+    </tr>
+<!-- <table id='earthquake_table'> -->
+{% for earthquake in earthquakes reversed %}
+<!--    <tr class="date w3-bar-item w3-button w3-hover-black" onclick="select_earthquake(this)"> </tr> -->
+    
+    
+    <tr class='table_row' id={{earthquake.id}} onclick="select_earthquake(this)">
+    
+    <td class='magnitude date w3-button w3-hover-black"' style="font-size: 14">{{earthquake.magnitude}}   </td>
+    <td>
+    <table class='inner_table' style="border: none;padding: none, ">
+    <tr class='table_row'>
+    <td class='title' style="font-size:10">{{earthquake.title}} </td>
+    </tr>
+    <tr class='table_row'>
+    <td class='city_info' style="font-size:6">{{earthquake.distance}} km from {{earthquake.closest_city}}</td>
+    </tr>
+        </table>
+    </td>
+
+    <td hidden>  <label class='public_url'> {{earthquake.public_url}} </label> </td>
+
+</tr>
+
+{% endfor %}
+</table>
+
+
+{% endif %}
+
+</div>
+    
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<div class="w3-main" style="margin-left:250px">
+
+
+<div class="popup w3-display-topright" onclick="info()">
+  <button class="w3-button w3-circle w3-grey popup" id = "myBtn">?
+     </button>
+</div>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close">&times;</span>
+      <h2>Modal Header</h2>
+    </div>
+    <div class="modal-body">
+      <p>Some text in the Modal Body</p>
+      <p>Some other text...</p>
+    </div>
+    <div class="modal-footer">
+      <h3>Modal Footer</h3>
+    </div>
+  </div>
+
+</div>
+
+
+<script>
+// Get the modal
+var modal = document.getElementById('myModal');
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+    
+
+    
+	
+  <footer id="myFooter">
+    <div class="w3-container w3-theme-l1 w3-padding-32">
+    <div class='session slidecontainer' id='sliderbar'>
+  <h6>Time: <label id='active-hour'>00:00</label></h6>
+  <input id='slider' class='slider' type='range' min='0' max='700' step='1' value='0' />
+</div>
+
+    <div class='button_row'>
+    <span class='btns'>
+<button id = "play-pause" class="btn w3-button w3-light-grey speed">Play</button>
+<button id = "stop" class="w3-button w3-light-grey speed">Stop</button>
+    </span>
+    <span id='mid'>
+    </span>
+    
+    <span class='speed_selection'>
+    <button class='speed_col' id='x1' onclick="speed_x(this)">x1</button>
+    <button class='speed_col' id='x5' onclick="speed_x(this)">x5</button>
+    <button class='speed_col' id='x10' onclick="speed_x(this)" style="background-color:black;color: white" >x10</button>
+    <button class='speed_col' id='x20' onclick="speed_x(this)">x20</button>
+    </span>
+        </div>
+      </div>
+
+
+  </footer>
+
+
+
+	
+	
+	
+	
+
+    </div>
+	
+	<button class='new-data' id = "load" hidden ><i class="ion-ios-plus-outline"></i>Load</button>
+   
+
+</body>
+</html>
+	
+
+
+
+	
+	
+	
+	
+    
+
+
+

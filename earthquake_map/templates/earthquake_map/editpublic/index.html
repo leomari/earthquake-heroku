@@ -1,0 +1,142 @@
+<html>
+<head>
+    
+{% load static %}
+<meta charset='utf-8' />
+<title>SkyAlert</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src='https://api.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js'></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="{% static 'editpublic/style.css' %}">
+<link href="{% static 'open-iconic/font/css/open-iconic-bootstrap.css' %}" rel='stylesheet' >
+</head>
+
+<body>
+    
+
+
+<div id='map'></div>
+    
+ 
+  
+	
+
+<script src="{% static 'editpublic/script7.js' %}"></script>  
+<div class='container' ></div>  
+
+
+    
+    
+<div id='console'>
+  <img src="{% static 'editpublic/skyalert_logo.png'  %}" alt="logo" width="130" height="70">
+<a id='home_button' href="{% url 'admin_home' %}">Home</a>
+	
+<button id="play-btn" class="btn"><i class="ion-ios-plus-outline"></i></button>
+<button class="btn-pause"><i class="ion-ios-plus-outline"></i></button>
+<button class="btn-reset"><i class="ion-ios-plus-outline"><i class="material-icons" id  ="reload" style="font-size:28px;color:#555" >rotate_left</i></i></button>
+<div class='session' id='sliderbar'>
+  <h2>Time: <label id='active-hour'>00:00</label></h2>
+  <input id='slider' class='row' type='range' min='0' step='1' value='0' />
+</div>
+    
+
+{% if earthquakes %}
+
+<div style='overflow-y:auto;'>
+<table style='font-size:10' >
+<tr id='header_row'>
+    <td>Magnitude</td>
+    <td>Date</td>
+    <td>Public</td>
+    </tr>
+<!-- <table id='earthquake_table'> -->
+{% for earthquake in earthquakes reversed %}
+<!--    <tr class="date w3-bar-item w3-button w3-hover-black" onclick="select_earthquake(this)"> </tr> -->
+    
+    
+    <tr class='table_row' id={{earthquake.id}} onclick="select_earthquake(this)">
+    
+    <td >{{earthquake.magnitude}}   </td>
+    <td class='title'>{{earthquake.title}}   </td>
+    
+    {% if earthquake.public_exists %}
+    <td><span class="oi oi-circle-check"></span></td>
+    {% else %}
+    <td> </td>
+    {% endif %}
+
+    <td hidden>  <label class='public_url'> {{earthquake.public_url}} </label> </td>
+    
+    <!--<td style="color:greenyellow;"> {{earthquake.public_exists}}</td> -->
+    
+</tr>
+
+{% endfor %}
+</table>
+
+
+{% endif %}
+
+</div>
+    
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<div id="result"> </div>   
+    
+
+    
+<table id='speed_selection'>
+    
+    <tr>Speed</tr>
+    <tr class='speed_row'>
+    <td class='speed_col' id='x1' onclick="speed_x(this)">x1</td>
+    <td class='speed_col' id='x5' onclick="speed_x(this)">x5</td>
+    <td class='speed_col' id='x10' onclick="speed_x(this)" style="background-color:black;color: white" >x10</td>
+    <td class='speed_col' id='x20' onclick="speed_x(this)">x20</td>
+    </tr>
+    
+    </table>
+
+	
+	<form method ='POST' action = "{%url 'edit_public' %}" enctype="multipart/form-data">
+		{% csrf_token %}
+		<input type = "text" id = "sn" name = "serial_number" hidden />
+		<input type = "text" id = "url" name = "url" hidden />	
+		
+		<input type = "text"  id = "title1" name = "main_title" hidden/>
+		<input  type="submit" name = "action" value = "remove" id = "remove" hidden/>	
+		<input type = "submit" name = "action" value = "export"  id = "export"  hidden />
+        <h1>Epicenter Speed</h1>
+        <input name='epi_speed' id='epi_speed' value="1", min="0", max="10" >    
+        <h1>Epicenter Delay</h1>
+        <input name='epi_delay' id='epi_delay' value="0", min="0", max="59" >    
+
+	</form>
+
+    <button id='undo-btn' onclick="undo_function()">Undo</button> <br />
+<button id='export-btn' onclick="export_function()">Export</button>
+
+</div>
+	
+	{% if message %}
+    
+    <p> {{message}}</p>
+	
+	{% endif %}
+	
+	<button class='new-data' id = "load" hidden><i class="ion-ios-plus-outline"></i>Load</button>
+    	<button class='update-layer' id = "update-layer" hidden></button>
+	
+	
+
+
+
+   
+
+</body>
+</html>
+

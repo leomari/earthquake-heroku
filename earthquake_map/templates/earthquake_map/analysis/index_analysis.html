@@ -1,0 +1,94 @@
+<html>
+<head>
+    
+{% load static %}
+<meta charset='utf-8' />
+<title>SkyAlert</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link type="text/css" rel="stylesheet" href="{% static 'analysis/style.css' %}">
+</head>
+
+<body>
+    
+
+
+<div id='map'></div>
+    
+<script src="{% static 'analysis/script_analysis2.js' %}"></script>  
+<div class='container' >
+
+    </div>    
+    
+    
+<div id='console'>
+  <img src="{% static 'editpublic/skyalert_logo.png'  %}" alt="logo" width="130" height="70">
+<a id='home_button' href="{% url 'admin_home' %}">Home</a>
+
+
+    
+<button id='play-btn' class="btn"><i class="ion-ios-plus-outline"></i></button>
+<button class="btn-pause"><i class="ion-ios-plus-outline"></i></button>
+<button class="btn-reset"><i class="ion-ios-plus-outline"><i class="material-icons" id  ="reload" style="font-size:28px;color:#555" >rotate_left</i></i></button>
+<div class='session' id='sliderbar'>
+  <h2>Time: <label id='active-hour'>00:00</label></h2>
+  <input id='slider' class='row' type='range' min='0' max='700' step='1' value='0' />
+</div>
+    
+
+{% if earthquakes %}
+
+<div style='overflow-y:auto;'>
+<table id='table' >
+<tr id='header_row'>
+    <td>Magnitude</td>
+    <td>Date</td>
+    </tr>
+
+{% for earthquake in earthquakes reversed %}    
+    <tr class='table_row' id={{earthquake.id}} onclick="select_earthquake(this)">
+    
+    <td >{{earthquake.magnitude}}   </td>
+    <td class='title'>{{earthquake.title}}   </td>
+
+    <td hidden>  <label class='public_url'> {{earthquake.public_url}} </label> </td>
+    <td hidden>  <label class='private_url'> {{earthquake.private_url}} </label> </td>
+
+</tr>
+
+{% endfor %}
+</table>
+
+
+{% endif %}
+
+</div>
+
+    
+
+<table id='speed_selection'>
+    
+    <tr>Speed</tr>
+    <tr class='speed_row'>
+    <td class='speed_col' id='x1' onclick="speed_x(this)">x1</td>
+    <td class='speed_col' id='x5' onclick="speed_x(this)">x5</td>
+    <td class='speed_col' id='x10' onclick="speed_x(this)" style="background-color:black;color: white" >x10</td>
+    <td class='speed_col' id='x20' onclick="speed_x(this)">x20</td>
+    </tr>
+    
+    </table>
+    
+</div>
+  
+<button class='new-data' id = "load" hidden><i class="ion-ios-plus-outline"></i>Load</button>    
+
+
+
+
+</body>
+
+</html>
+

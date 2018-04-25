@@ -1,0 +1,106 @@
+
+
+
+<title>SkyAlert</title>
+<h1>Upload Data</h1>
+<a target="_blank" href="http://www2.ssn.unam.mx:8080/catalogo">SSN earthquake catalog</a>
+{% load static %}
+<link href="{% static 'open-iconic/font/css/open-iconic-bootstrap.css' %}" rel='stylesheet' >
+<link type= "text/css" rel = "stylesheet"
+			  href = "{% static 'data/style.css'%}" >
+<script src="{% static 'data/script_data.js' %}"></script>  
+<form method='POST' action="{% url 'data' %}" enctype="multipart/form-data">
+{% csrf_token %}
+
+<br />
+Date (MM-DD-YYYY):
+<br />
+<input type='text' name='title' />
+    
+<br />
+Magnitude:
+<br />
+<input type='text' name='magnitude' />
+
+<br />
+<br />
+Epsienter information:
+<br />
+Longitude
+<br />
+<input type='text' name='epi_lon' />
+
+<br />
+Latitude
+<br />
+<input type='text' name='epi_lat' />
+
+
+    
+<br />
+Excel data:
+<br />
+<input type='file' name='excel_data' />
+    
+<input type="text" id="delete_title" name="delete_title" hidden />
+
+
+    
+<input id='submit-btn' class='btn btn-primary' type='submit' value='Upload' /> 
+</form>
+
+<a href="{% url 'admin_home' %}">Return to home</a>
+
+{% if error %}
+<br />
+{{error}}
+<br />
+{% endif %}
+
+{% if message %}
+<br />
+{{message}}
+<br />
+{% endif %}
+
+
+
+{% if earthquakes %}
+<!--
+<nav class="w3-sidebar w3-bar-block w3-collapse w3-large w3-theme-l5 w3-animate-left" id="mySidebar">
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-right w3-xlarge w3-padding-large w3-hover-black w3-hide-large" title="Close Menu"/>
+    <i class="fa fa-remove"></i>
+-->
+<div style='overflow-y:auto;'>
+<table >
+<tr id='header_row'>
+    <td>Magnitude</td>
+    <td>Date</td>
+    <td>Public</td>
+    <td> </td>
+    </tr>
+<!-- <table id='earthquake_table'> -->
+{% for earthquake in earthquakes reversed %}
+<!--    <tr class="date w3-bar-item w3-button w3-hover-black" onclick="select_earthquake(this)"> </tr> -->
+    
+    
+    <tr class='table_row' id={{earthquake.id}} >
+    
+    <td>{{earthquake.magnitude}}   </td>
+    <td>{{earthquake.title}}   </td>
+    <!--<span class="oi oi-circle-check"></span> -->
+    {% if earthquake.public_exists %}
+    <td><span class="oi oi-circle-check"></span></td>
+    {% else %}
+    <td> </td>
+    {% endif %}
+    <td class='delete-btn' onclick=delete_data(this)><span class="oi oi-trash"></span><label class='title_to_delete' hidden> {{earthquake.title}} </label></td>
+    
+        
+</tr>
+
+{% endfor %}
+</table>
+    
+{% endif %}
+

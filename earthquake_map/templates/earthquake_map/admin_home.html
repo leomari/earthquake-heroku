@@ -1,0 +1,27 @@
+<html>
+    {% load static %}
+	<head>
+		<meta charset='utf-8' />
+		<title>SkyAlert</title>
+		<link type= "text/css" rel = "stylesheet"
+			  href = "{% static 'home/main.css'%}" >
+		
+	</head>
+	<body>
+		<div class = "buttons">
+			<a href = "{% url 'analysis' %}"><button id = "private">Analysis</button></a>
+			<a href = "{% url 'public' %}"><button id = "public">Public</button></a>
+            <a href = "{% url 'edit_public' %}"><button id = "editpublic">Edit Public</button></a>
+             <a href = "{% url 'data' %}"><button id = "upload">Data</button></a>
+            <a class="nav-item nav-link" href="javascript:{document.getElementById('logout').submit()}">Logout</a>
+        <form id='logout' method='POST' action="{% url 'logout' %}">
+        {% csrf_token %}
+            <input type='hidden' />
+        </form> 
+		
+		</div>
+	
+	</body>
+
+
+</html>
